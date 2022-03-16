@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UserAuthRequestDto } from '../../model/user/user-login.dto';
+import { UserRegisterRequestDto } from '../../model/user/user-login.dto';
 import { UserEntity } from '../../common/entity/user-entity';
 import { UserRepository } from '../../repository/user/user.repository';
 
 @Injectable()
 export class UserService {
   constructor(private userRepository: UserRepository) {}
-  async createUser(createUser: UserAuthRequestDto) {
+  async createUser(createUser: UserRegisterRequestDto) {
     const user = new UserEntity();
     user.name = createUser.name;
     user.login = createUser.login;
