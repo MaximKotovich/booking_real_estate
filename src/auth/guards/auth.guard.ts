@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
     try {
       const getToken = jwt.verify(request.cookies.jwt, jwtConstants.secret);
       return !!getToken;

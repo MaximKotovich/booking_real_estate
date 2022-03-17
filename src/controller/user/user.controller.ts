@@ -12,7 +12,6 @@ import {
   UserRegisterRequestDto,
 } from '../../model/user/user-login.dto';
 import { AuthService } from '../../auth/auth.service';
-import { LocalAuthGuard } from '../../auth/guards/local-auth.guard';
 
 @ApiTags('user')
 @Controller('user')
