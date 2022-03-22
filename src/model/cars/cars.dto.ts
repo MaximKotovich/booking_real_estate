@@ -12,4 +12,12 @@ export class CarsRequestDto {
 
   @ApiProperty()
   price: string;
+
+  @ApiProperty()
+  image?: string | null;
+}
+
+export class CarPhotos {
+  @ApiProperty()
+  image: string;
 }

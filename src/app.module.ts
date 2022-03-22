@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { UserEntity } from './common/entity/user-entity';
 import { ControllerModule } from './controller/controller.module';
 import { CarsEntity } from './common/entity/cars-entity';
+import { CarPhotosEntity } from './common/entity/car-photos-entity';
+import * as path from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -15,8 +18,11 @@ import { CarsEntity } from './common/entity/cars-entity';
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
-      entities: [UserEntity, CarsEntity],
+      entities: [UserEntity, CarsEntity, CarPhotosEntity],
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, 'static'),
     }),
     ControllerModule,
   ],

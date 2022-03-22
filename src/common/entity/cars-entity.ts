@@ -22,6 +22,12 @@ export class CarsEntity extends BaseEntity {
   price: string;
 
   @ApiProperty()
+  @Column({
+    nullable: true,
+  })
+  image: string;
+
+  @ApiProperty()
   @ManyToOne(() => UserEntity, (user) => user.id)
   owner: UserEntity;
 }
