@@ -10,6 +10,8 @@ export class CarPhotosEntity extends BaseEntity {
   profileImage: string;
 
   @ApiProperty()
-  @ManyToOne(() => CarsEntity, (car) => car.id)
+  @ManyToOne(() => CarsEntity, (car) => car.id, {
+    onDelete: 'CASCADE',
+  })
   car: CarsEntity;
 }

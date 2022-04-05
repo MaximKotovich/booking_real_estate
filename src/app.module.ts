@@ -8,6 +8,7 @@ import { CarsEntity } from './common/entity/cars-entity';
 import { CarPhotosEntity } from './common/entity/car-photos-entity';
 import * as path from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -22,8 +23,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       synchronize: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, 'static'),
+      rootPath: path.resolve('src/common', 'static'),
     }),
+    ConfigModule.forRoot(),
     ControllerModule,
   ],
   controllers: [AppController],

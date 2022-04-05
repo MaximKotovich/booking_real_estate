@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CarsRequestDto } from 'src/model/cars/cars.dto';
+import { CarsRequestDto, UpdateCarDto } from 'src/model/cars/cars.dto';
 import { Request } from 'express';
 import jwt_decode from 'jwt-decode';
 import { CarsRepository } from '../../repository/cars/cars.repository';
 import { UserRepository } from '../../repository/user/user.repository';
 import { CarFileService } from './car-file.service';
 import { CarPhotoRepository } from '../../repository/cars/car-photo.repository';
-import * as fs from 'fs';
 import { CarsEntity } from '../../common/entity/cars-entity';
+import { WithIdModel } from '../../model/base/withIdModel';
 
 @Injectable()
 export class CarsService {
@@ -45,11 +45,35 @@ export class CarsService {
     });
   }
 
+  async deleteCar(id: number) {
+    const car = await this.carsRepository.findOne(id, {
+      relations: ['images'],
+    });
+    if (car.images) {
+      car.images.forEach((el) => {
+        this.carFileService.removeFile(
+          el.profileImage.replace(process.env.URL, ''),
+        );
+      });
+    }
+    await this.carsRepository.delete(id);
+    return 'OK';
+  }
+
+  async patch(updateCar: UpdateCarDto & WithIdModel) {
+    const car = this.carsRepository.findOne(updateCar.id);
+    const newCar = {
+      ...car,
+      ...updateCar,
+    };
+    delete newCar.id;
+    await this.carsRepository.update(updateCar.id, newCar);
+    return 'UPDATED';
+  }
+
   async upload(image) {
     try {
-      return `http://localhost:3000/${await this.carFileService.createFile(
-        image,
-      )}`;
+      return `${process.env.URL}${await this.carFileService.createFile(image)}`;
     } catch (e) {
       console.log(e);
     }
@@ -62,19 +86,11 @@ export class CarsService {
       .innerJoin('cars.owner', 'owner')
       .where('cars.owner = :id', { id: user_id.sub })
       .getMany();
-
-    // .select('roles.role')
-    // .innerJoin('roles.users', 'user_roles')
-    // .where('user_roles.id = :id', { id })
-    // .getMany();
-    // return await this.carsRepository.find({
-    //   select: ['owner.id'],
-    //   where: { owner: user_id.sub },
-    //   relations: ['owner'],
-    // });
   }
 
-  async uploadCarPhoto(uploadDto) {
-    console.log(uploadDto);
+  async getCarById(id: number) {
+    return await this.carsRepository.findOne(id, {
+      relations: ['images', 'owner'],
+    });
   }
 }

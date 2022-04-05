@@ -25,10 +25,7 @@ export class CarFileService {
     }
   }
 
-  async addCarId(carId, fileName) {
-    const image = await this.fileImageRepository.findOne({
-      profileImage: fileName,
-    });
-    await this.fileImageRepository.update(image.id, { car: carId });
+  async removeFile(fileName: string) {
+    fs.unlinkSync(`src/common/static/${fileName}`);
   }
 }

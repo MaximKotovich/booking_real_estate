@@ -16,3 +16,17 @@ export class CarsRequestDto {
   @ApiProperty()
   images?: string[];
 }
+
+export class UpdateCarDto {
+  @ApiProperty()
+  name?: string;
+
+  @ApiProperty()
+  secondName?: string;
+
+  @ApiProperty()
+  year?: string;
+
+  @ApiProperty()
+  price?: string;
+}
