@@ -34,13 +34,19 @@ export class CarsController {
   @ApiBadRequestResponse({ description: 'Something wrong' })
   @UseGuards(AuthGuard)
   @Post('/addCar')
+  async addCar(@Body() newCarRequestDto: CarsRequestDto, @Req() req: Request) {
+    return await this.carsService.add(newCarRequestDto, req);
+  }
+
+  @ApiOperation({ summary: 'uploadFile' })
+  @ApiResponse({ status: 201, description: 'uploadFile' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiBadRequestResponse({ description: 'Something wrong' })
+  @UseGuards(AuthGuard)
+  @Post('/uploadFile')
   @UseInterceptors(FileInterceptor('image'))
-  async addCar(
-    @Body() newCarRequestDto: CarsRequestDto,
-    @Req() req: Request,
-    @UploadedFile() image,
-  ) {
-    return await this.carsService.add(newCarRequestDto, req, image);
+  async uploadFile(@UploadedFile() image) {
+    return await this.carsService.upload(image);
   }
 
   @ApiOperation({ summary: 'getCarByUser' })

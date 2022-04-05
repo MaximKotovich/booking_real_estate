@@ -1,7 +1,8 @@
 import { BaseEntity } from './base-entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from './user-entity';
+import { CarPhotosEntity } from './car-photos-entity';
 
 @Entity({ name: 'cars' })
 export class CarsEntity extends BaseEntity {
@@ -22,10 +23,11 @@ export class CarsEntity extends BaseEntity {
   price: string;
 
   @ApiProperty()
-  @Column({
-    nullable: true,
-  })
-  image: string;
+  @OneToMany(() => CarPhotosEntity, (carPhoto) => carPhoto.car)
+  images: CarPhotosEntity[];
+  // @ApiProperty()
+  // @Column('text', { array: true })
+  // images: string[];
 
   @ApiProperty()
   @ManyToOne(() => UserEntity, (user) => user.id)
